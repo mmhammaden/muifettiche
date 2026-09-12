@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    .quiz-container {
+      padding: 2rem 1.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .quiz-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .quiz-score {
+      display: flex;
+      gap: 8px;
+    }
+
+    .score-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .score-incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .score-correct {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .progress-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #3b82f6;
+      transition: width 0.3s ease;
+    }
+
+    .question-counter {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .question-section {
+      margin-bottom: 2rem;
+    }
+
+    .question-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1f2937;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      gap: 12px;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+    }
+
+    .option:hover:not(.disabled) {
+      border-color: #d1d5db;
+      background: #f9fafb;
+    }
+
+    .option.selected {
+      border-color: #d1d5db;
+    }
+
+    .option.correct {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+
+    .option.incorrect {
+      background: #fef2f2;
+      border-color: #ef4444;
+    }
+
+    .option.disabled {
+      cursor: not-allowed;
+    }
+
+    .option-label {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 14px;
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .option.correct .option-label {
+      background: #22c55e;
+      color: white;
+    }
+
+    .option.incorrect .option-label {
+      background: #ef4444;
+      color: white;
+    }
+
+    .option-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .option-text {
+      font-size: 15px;
+      color: #1f2937;
+    }
+
+    .option.correct .option-text {
+      color: #166534;
+      font-weight: 500;
+    }
+
+    .option.incorrect .option-text {
+      color: #7f1d1d;
+    }
+
+    .option-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .correct-badge {
+      background: #86efac;
+      color: #166534;
+    }
+
+    .incorrect-badge {
+      background: #fca5a5;
+      color: #7f1d1d;
+    }
+
+    .explanation {
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 6px;
+      color: #6b7280;
+    }
+
+    .option.correct .explanation {
+      color: #166534;
+    }
+
+    .option.incorrect .explanation {
+      color: #7f1d1d;
+    }
+
+    .nav-section {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    button {
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      color: #1f2937;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: #e5e7eb;
+      border-color: #9ca3af;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-next {
+      background: #3b82f6;
+      color: white;
+      border: 1px solid #3b82f6;
+    }
+
+    .btn-next:hover:not(:disabled) {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <div class="quiz-title" id="quizTitle">Quiz</div>
+      <div class="quiz-score">
+        <div class="score-badge score-incorrect">
+          <span>✕</span>
+          <span id="incorrectCount">0</span>
+        </div>
+        <div class="score-badge score-correct">
+          <span>✓</span>
+          <span id="correctCount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="question-counter" id="questionCounter">1/7</div>
+    </div>
+
+    <div class="question-section">
+      <div class="question-text" id="questionText">What is the capital of France?</div>
+      <div class="options" id="optionsContainer"></div>
+    </div>
+
+    <div class="nav-section">
+      <button id="backBtn" onclick="previousQuestion()">Back</button>
+      <button id="nextBtn" class="btn-next" onclick="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: [
+          { label: "A", text: "Lyon", explanation: "Lyon is a major city but not the capital." },
+          { label: "B", text: "Paris", explanation: "Paris has been the capital of France since the 12th century." },
+          { label: "C", text: "Marseille", explanation: "Marseille is the second-largest city in France." },
+          { label: "D", text: "Nice", explanation: "Nice is located on the French Riviera." }
+        ],
+        correctIndex: 1
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: [
+          { label: "A", text: "Venus", explanation: "Venus is known as the Evening Star." },
+          { label: "B", text: "Mercury", explanation: "Mercury is the closest planet to the Sun." },
+          { label: "C", text: "Mars", explanation: "Mars appears reddish due to iron oxide on its surface." },
+          { label: "D", text: "Jupiter", explanation: "Jupiter is the largest planet in our solar system." }
+        ],
+        correctIndex: 2
+      },
+      {
+        question: "What is the smallest country in the world?",
+        options: [
+          { label: "A", text: "Monaco", explanation: "Monaco is a small sovereign city-state on the Mediterranean." },
+          { label: "B", text: "Vatican City", explanation: "Vatican City is an independent city-state surrounded by Rome, covering about 0.44 square kilometers." },
+          { label: "C", text: "Liechtenstein", explanation: "Liechtenstein is a small Alpine country between Switzerland and Austria." },
+          { label: "D", text: "Malta", explanation: "Malta is an island nation in the Mediterranean." }
+        ],
+        correctIndex: 1
+      },
+      {
+        question: "In what year did the Titanic sink?",
+        options: [
+          { label: "A", text: "1912", explanation: "The Titanic sank on April 15, 1912, after hitting an iceberg." },
+          { label: "B", text: "1905", explanation: "1905 was before the Titanic was even built." },
+          { label: "C", text: "1920", explanation: "By 1920, the Titanic had already sunk for 8 years." },
+          { label: "D", text: "1898", explanation: "The Titanic was launched in 1911, not sunk in 1898." }
+        ],
+        correctIndex: 0
+      },
+      {
+        question: "Which element has the chemical symbol 'Au'?",
+        options: [
+          { label: "A", text: "Silver", explanation: "Silver has the symbol 'Ag' from its Latin name 'argentum'." },
+          { label: "B", text: "Gold", explanation: "Gold's symbol 'Au' comes from its Latin name 'aurum'." },
+          { label: "C", text: "Aluminum", explanation: "Aluminum has the symbol 'Al'." },
+          { label: "D", text: "Arsenic", explanation: "Arsenic has the symbol 'As'." }
+        ],
+        correctIndex: 1
+      },
+      {
+        question: "What is the largest ocean on Earth?",
+        options: [
+          { label: "A", text: "Atlantic Ocean", explanation: "The Atlantic is the second-largest ocean." },
+          { label: "B", text: "Indian Ocean", explanation: "The Indian Ocean is the third-largest ocean." },
+          { label: "C", text: "Pacific Ocean", explanation: "The Pacific Ocean covers about 46% of the world's ocean surface." },
+          { label: "D", text: "Arctic Ocean", explanation: "The Arctic Ocean is the smallest of the major oceans." }
+        ],
+        correctIndex: 2
+      },
+      {
+        question: "Who wrote 'Romeo and Juliet'?",
+        options: [
+          { label: "A", text: "Jane Austen", explanation: "Jane Austen wrote novels like 'Pride and Prejudice'." },
+          { label: "B", text: "William Shakespeare", explanation: "Shakespeare wrote 'Romeo and Juliet' early in his career, likely between 1594-1596." },
+          { label: "C", text: "Christopher Marlowe", explanation: "Marlowe was a contemporary of Shakespeare but did not write this play." },
+          { label: "D", text: "Ben Jonson", explanation: "Ben Jonson was a playwright but did not write 'Romeo and Juliet'." }
+        ],
+        correctIndex: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let answers = new Array(questions.length).fill(null);
+    let answered = new Array(questions.length).fill(false);
+
+    function updateUI() {
+      const q = questions[currentQuestion];
+      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('questionCounter').textContent = `${currentQuestion + 1}/${questions.length}`;
+
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const option = document.createElement('div');
+        option.className = 'option';
+
+        const isAnswered = answered[currentQuestion];
+        const selected = answers[currentQuestion];
+        const isCorrect = idx === q.correctIndex;
+
+        if (isAnswered) {
+          if (idx === selected && isCorrect) {
+            option.classList.add('correct');
+          } else if (idx === selected && !isCorrect) {
+            option.classList.add('incorrect');
+          } else if (isCorrect) {
+            option.classList.add('correct');
+          }
+          option.classList.add('disabled');
+        } else {
+          option.onclick = () => selectOption(idx);
+        }
+
+        const label = document.createElement('div');
+        label.className = 'option-label';
+        label.textContent = opt.label;
+
+        const content = document.createElement('div');
+        content.className = 'option-content';
+
+        const text = document.createElement('div');
+        text.className = 'option-text';
+        text.textContent = opt.text;
+        content.appendChild(text);
+
+        if (isAnswered && (idx === selected || isCorrect)) {
+          const badge = document.createElement('div');
+          badge.className = 'option-badge ' + (isCorrect ? 'correct-badge' : 'incorrect-badge');
+          badge.textContent = isCorrect ? '✓ Correct answer' : '✕ Incorrect';
+          content.appendChild(badge);
+
+          const explanation = document.createElement('div');
+          explanation.className = 'explanation';
+          explanation.textContent = opt.explanation;
+          content.appendChild(explanation);
+        }
+
+        option.appendChild(label);
+        option.appendChild(content);
+        container.appendChild(option);
+      });
+
+      const correctCount = answers.filter((ans, idx) => ans !== null && ans === questions[idx].correctIndex).length;
+      document.getElementById('correctCount').textContent = correctCount;
+      document.getElementById('incorrectCount').textContent = answered.filter(Boolean).length - correctCount;
+
+      document.getElementById('backBtn').disabled = currentQuestion === 0;
+      document.getElementById('nextBtn').disabled = !answered[currentQuestion];
+      document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
+    }
+
+    function selectOption(idx) {
+      answers[currentQuestion] = idx;
+      answered[currentQuestion] = true;
+      updateUI();
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        updateUI();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        updateUI();
+      } else {
+        const correctCount = answers.filter((ans, idx) => ans === questions[idx].correctIndex).length;
+        alert(`Quiz complete! You got ${correctCount}/${questions.length} correct.`);
+      }
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>
