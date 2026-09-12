@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz App</title>
+  <title>تطبيق الاختبار</title>
   <style>
     * {
       margin: 0;
@@ -12,7 +12,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Arial, -apple-system, BlinkMacSystemFont, sans-serif;
       background: #f9fafb;
       color: #1f2937;
     }
@@ -264,7 +264,7 @@
 <body>
   <div class="quiz-container">
     <div class="quiz-header">
-      <div class="quiz-title" id="quizTitle">Quiz</div>
+      <div class="quiz-title" id="quizTitle">اختبار</div>
       <div class="quiz-score">
         <div class="score-badge score-incorrect">
           <span>✕</span>
@@ -285,85 +285,85 @@
     </div>
 
     <div class="question-section">
-      <div class="question-text" id="questionText">What is the capital of France?</div>
+      <div class="question-text" id="questionText">ما هي عاصمة فرنسا؟</div>
       <div class="options" id="optionsContainer"></div>
     </div>
 
     <div class="nav-section">
-      <button id="backBtn" onclick="previousQuestion()">Back</button>
-      <button id="nextBtn" class="btn-next" onclick="nextQuestion()">Next</button>
+      <button id="backBtn" onclick="previousQuestion()">رجوع</button>
+      <button id="nextBtn" class="btn-next" onclick="nextQuestion()">التالي</button>
     </div>
   </div>
 
   <script>
     const questions = [
       {
-        question: "What is the capital of France?",
+        question: "ما هي عاصمة فرنسا؟",
         options: [
-          { label: "A", text: "Lyon", explanation: "Lyon is a major city but not the capital." },
-          { label: "B", text: "Paris", explanation: "Paris has been the capital of France since the 12th century." },
-          { label: "C", text: "Marseille", explanation: "Marseille is the second-largest city in France." },
-          { label: "D", text: "Nice", explanation: "Nice is located on the French Riviera." }
+          { label: "أ", text: "ليون", explanation: "ليون مدينة كبيرة لكنها ليست العاصمة." },
+          { label: "ب", text: "باريس", explanation: "باريس هي عاصمة فرنسا منذ القرن الثاني عشر." },
+          { label: "ج", text: "مرسيليا", explanation: "مرسيليا هي ثاني أكبر مدينة في فرنسا." },
+          { label: "د", text: "نيس", explanation: "تقع نيس على الريفييرا الفرنسية." }
         ],
         correctIndex: 1
       },
       {
-        question: "Which planet is known as the Red Planet?",
+        question: "أي كوكب يُعرف بالكوكب الأحمر؟",
         options: [
-          { label: "A", text: "Venus", explanation: "Venus is known as the Evening Star." },
-          { label: "B", text: "Mercury", explanation: "Mercury is the closest planet to the Sun." },
-          { label: "C", text: "Mars", explanation: "Mars appears reddish due to iron oxide on its surface." },
-          { label: "D", text: "Jupiter", explanation: "Jupiter is the largest planet in our solar system." }
+          { label: "أ", text: "الزهرة", explanation: "الزهرة يُعرف بنجمة المساء." },
+          { label: "ب", text: "عطارد", explanation: "عطارد هو أقرب كوكب إلى الشمس." },
+          { label: "ج", text: "المريخ", explanation: "يبدو المريخ أحمر اللون بسبب أكسيد الحديد على سطحه." },
+          { label: "د", text: "المشتري", explanation: "المشتري هو أكبر كوكب في مجموعتنا الشمسية." }
         ],
         correctIndex: 2
       },
       {
-        question: "What is the smallest country in the world?",
+        question: "ما هي أصغر دولة في العالم؟",
         options: [
-          { label: "A", text: "Monaco", explanation: "Monaco is a small sovereign city-state on the Mediterranean." },
-          { label: "B", text: "Vatican City", explanation: "Vatican City is an independent city-state surrounded by Rome, covering about 0.44 square kilometers." },
-          { label: "C", text: "Liechtenstein", explanation: "Liechtenstein is a small Alpine country between Switzerland and Austria." },
-          { label: "D", text: "Malta", explanation: "Malta is an island nation in the Mediterranean." }
+          { label: "أ", text: "موناكو", explanation: "موناكو دولة مدينة صغيرة ذات سيادة على البحر المتوسط." },
+          { label: "ب", text: "الفاتيكان", explanation: "الفاتيكان دولة مدينة مستقلة تحيط بها روما، وتبلغ مساحتها حوالي 0.44 كيلومتر مربع." },
+          { label: "ج", text: "ليختنشتاين", explanation: "ليختنشتاين دولة ألبية صغيرة بين سويسرا والنمسا." },
+          { label: "د", text: "مالطا", explanation: "مالطا دولة جزرية في البحر المتوسط." }
         ],
         correctIndex: 1
       },
       {
-        question: "In what year did the Titanic sink?",
+        question: "في أي عام غرقت سفينة تايتانيك؟",
         options: [
-          { label: "A", text: "1912", explanation: "The Titanic sank on April 15, 1912, after hitting an iceberg." },
-          { label: "B", text: "1905", explanation: "1905 was before the Titanic was even built." },
-          { label: "C", text: "1920", explanation: "By 1920, the Titanic had already sunk for 8 years." },
-          { label: "D", text: "1898", explanation: "The Titanic was launched in 1911, not sunk in 1898." }
+          { label: "أ", text: "1912", explanation: "غرقت تايتانيك في 15 أبريل 1912 بعد اصطدامها بجبل جليدي." },
+          { label: "ب", text: "1905", explanation: "عام 1905 كان قبل بناء تايتانيك أصلاً." },
+          { label: "ج", text: "1920", explanation: "بحلول عام 1920 كانت تايتانيك قد غرقت منذ 8 سنوات." },
+          { label: "د", text: "1898", explanation: "تم إطلاق تايتانيك عام 1911، ولم تغرق عام 1898." }
         ],
         correctIndex: 0
       },
       {
-        question: "Which element has the chemical symbol 'Au'?",
+        question: "أي عنصر يحمل الرمز الكيميائي 'Au'؟",
         options: [
-          { label: "A", text: "Silver", explanation: "Silver has the symbol 'Ag' from its Latin name 'argentum'." },
-          { label: "B", text: "Gold", explanation: "Gold's symbol 'Au' comes from its Latin name 'aurum'." },
-          { label: "C", text: "Aluminum", explanation: "Aluminum has the symbol 'Al'." },
-          { label: "D", text: "Arsenic", explanation: "Arsenic has the symbol 'As'." }
+          { label: "أ", text: "الفضة", explanation: "رمز الفضة هو 'Ag' المشتق من اسمها اللاتيني 'argentum'." },
+          { label: "ب", text: "الذهب", explanation: "رمز الذهب 'Au' مشتق من اسمه اللاتيني 'aurum'." },
+          { label: "ج", text: "الألمنيوم", explanation: "رمز الألمنيوم هو 'Al'." },
+          { label: "د", text: "الزرنيخ", explanation: "رمز الزرنيخ هو 'As'." }
         ],
         correctIndex: 1
       },
       {
-        question: "What is the largest ocean on Earth?",
+        question: "ما هو أكبر محيط على وجه الأرض؟",
         options: [
-          { label: "A", text: "Atlantic Ocean", explanation: "The Atlantic is the second-largest ocean." },
-          { label: "B", text: "Indian Ocean", explanation: "The Indian Ocean is the third-largest ocean." },
-          { label: "C", text: "Pacific Ocean", explanation: "The Pacific Ocean covers about 46% of the world's ocean surface." },
-          { label: "D", text: "Arctic Ocean", explanation: "The Arctic Ocean is the smallest of the major oceans." }
+          { label: "أ", text: "المحيط الأطلسي", explanation: "المحيط الأطلسي هو ثاني أكبر محيط." },
+          { label: "ب", text: "المحيط الهندي", explanation: "المحيط الهندي هو ثالث أكبر محيط." },
+          { label: "ج", text: "المحيط الهادئ", explanation: "يغطي المحيط الهادئ حوالي 46% من مساحة محيطات العالم." },
+          { label: "د", text: "المحيط المتجمد الشمالي", explanation: "المحيط المتجمد الشمالي هو أصغر المحيطات الرئيسية." }
         ],
         correctIndex: 2
       },
       {
-        question: "Who wrote 'Romeo and Juliet'?",
+        question: "من كتب مسرحية 'روميو وجولييت'؟",
         options: [
-          { label: "A", text: "Jane Austen", explanation: "Jane Austen wrote novels like 'Pride and Prejudice'." },
-          { label: "B", text: "William Shakespeare", explanation: "Shakespeare wrote 'Romeo and Juliet' early in his career, likely between 1594-1596." },
-          { label: "C", text: "Christopher Marlowe", explanation: "Marlowe was a contemporary of Shakespeare but did not write this play." },
-          { label: "D", text: "Ben Jonson", explanation: "Ben Jonson was a playwright but did not write 'Romeo and Juliet'." }
+          { label: "أ", text: "جين أوستن", explanation: "كتبت جين أوستن روايات مثل 'كبرياء وتحامل'." },
+          { label: "ب", text: "ويليام شكسبير", explanation: "كتب شكسبير 'روميو وجولييت' في بداية مسيرته، على الأرجح بين عامي 1594-1596." },
+          { label: "ج", text: "كريستوفر مارلو", explanation: "كان مارلو معاصراً لشكسبير لكنه لم يكتب هذه المسرحية." },
+          { label: "د", text: "بن جونسون", explanation: "كان بن جونسون كاتباً مسرحياً لكنه لم يكتب 'روميو وجولييت'." }
         ],
         correctIndex: 1
       }
@@ -420,7 +420,7 @@
         if (isAnswered && (idx === selected || isCorrect)) {
           const badge = document.createElement('div');
           badge.className = 'option-badge ' + (isCorrect ? 'correct-badge' : 'incorrect-badge');
-          badge.textContent = isCorrect ? '✓ Correct answer' : '✕ Incorrect';
+          badge.textContent = isCorrect ? '✓ الإجابة الصحيحة' : '✕ إجابة خاطئة';
           content.appendChild(badge);
 
           const explanation = document.createElement('div');
@@ -440,7 +440,7 @@
 
       document.getElementById('backBtn').disabled = currentQuestion === 0;
       document.getElementById('nextBtn').disabled = !answered[currentQuestion];
-      document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Finish' : 'Next';
+      document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'إنهاء' : 'التالي';
     }
 
     function selectOption(idx) {
@@ -462,7 +462,7 @@
         updateUI();
       } else {
         const correctCount = answers.filter((ans, idx) => ans === questions[idx].correctIndex).length;
-        alert(`Quiz complete! You got ${correctCount}/${questions.length} correct.`);
+        alert(`اكتمل الاختبار! لقد حصلت على ${correctCount}/${questions.length} إجابات صحيحة.`);
       }
     }
 
