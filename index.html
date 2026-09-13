@@ -263,6 +263,38 @@
     }
 
     /* Quiz screen */
+    .exam-timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--surface-3);
+      color: var(--text-soft);
+      font-weight: 700;
+      font-size: 13px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .exam-timer #timerValue {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .exam-timer.urgent {
+      background: var(--danger-soft);
+      color: var(--danger-strong);
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+
     .quiz-header {
       display: flex;
       justify-content: space-between;
@@ -886,6 +918,15 @@
   </div>
 
   <div class="app-card" id="quizContainer" hidden>
+    <div class="exam-timer" id="examTimerBadge">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>الوقت المتبقي:</span>
+      <span id="timerValue">00:00</span>
+    </div>
+
     <div class="quiz-header">
       <div class="quiz-brand">
         <span class="quiz-brand-icon">
@@ -2407,12 +2448,49 @@
 
     const HIDE_ANSWER_COUNT_EXAMS = ['success2', 'success3'];
 
+    const SECONDS_PER_QUESTION = 120;
+
     let questions = [];
     let currentExamType = null;
     let currentQuestion = 0;
     let selections = [];
     let checked = [];
     let points = [];
+    let examTimerInterval = null;
+    let examEndTime = null;
+
+    function stopExamTimer() {
+      if (examTimerInterval) {
+        clearInterval(examTimerInterval);
+        examTimerInterval = null;
+      }
+    }
+
+    function updateTimerDisplay() {
+      const remainingMs = examEndTime - Date.now();
+      const timerBadge = document.getElementById('examTimerBadge');
+
+      if (remainingMs <= 0) {
+        document.getElementById('timerValue').textContent = '00:00';
+        stopExamTimer();
+        showResults();
+        return;
+      }
+
+      const totalSeconds = Math.ceil(remainingMs / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      document.getElementById('timerValue').textContent =
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      timerBadge.classList.toggle('urgent', remainingMs <= 120000);
+    }
+
+    function startExamTimer() {
+      stopExamTimer();
+      examEndTime = Date.now() + questions.length * SECONDS_PER_QUESTION * 1000;
+      updateTimerDisplay();
+      examTimerInterval = setInterval(updateTimerDisplay, 1000);
+    }
 
     function computePickTotals() {
       let correctPicks = 0;
@@ -2657,6 +2735,8 @@
     }
 
     function showResults() {
+      stopExamTimer();
+
       const total = questions.length;
       const totalPoints = points.reduce((sum, p) => sum + (p || 0), 0);
       const rawPercent = total === 0 ? 0 : (totalPoints / total) * 100;
@@ -2718,6 +2798,7 @@
       document.getElementById('resultsScreen').hidden = true;
       document.getElementById('quizContainer').hidden = false;
       updateUI();
+      startExamTimer();
     }
   </script>
 </body>
