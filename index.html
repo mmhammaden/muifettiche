@@ -174,6 +174,29 @@
       max-width: 420px;
     }
 
+    .screen-back {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--surface-3);
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .screen-back:hover {
+      background: var(--surface-2);
+      border-color: var(--text-faint);
+    }
+
     .exam-list {
       display: flex;
       flex-direction: column;
@@ -863,7 +886,55 @@
       <path d="M22 27 L29 34 L43 19" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
     <div class="brand-title">الناجحات</div>
-    <div class="start-title">مرحباً أيها المتسابقون، اختاروا امتحاناً واحداً:</div>
+    <div class="start-title">مرحباً أيها المتسابقون، اختاروا فئة الامتحانات:</div>
+    <div class="exam-list">
+      <button class="exam-card" onclick="showOldExams()">
+        <span class="exam-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 9v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 2h6M12 2v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="exam-card-body">
+          <span class="exam-card-title">الامتحانات القديمة</span>
+          <span class="exam-card-subtitle">ثلاثة امتحانات تجريبية، عشرة أسئلة لكل امتحان</span>
+        </span>
+        <span class="exam-card-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      <button class="exam-card" onclick="showRealExams()">
+        <span class="exam-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </span>
+        <span class="exam-card-body">
+          <span class="exam-card-title">الامتحانات الحقيقية</span>
+          <span class="exam-card-subtitle">الامتحانات الرسمية — قريباً</span>
+        </span>
+        <span class="exam-card-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-card start-card" id="oldExamsScreen" hidden>
+    <button class="screen-back" onclick="backToCategories()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>رجوع</span>
+    </button>
+    <div class="brand-title">الامتحانات القديمة</div>
+    <div class="start-title">اختاروا امتحاناً واحداً:</div>
     <div class="exam-list">
       <button class="exam-card" onclick="startExam('success')">
         <span class="exam-card-icon">
@@ -915,6 +986,18 @@
       </button>
     </div>
     <div class="exam-note">سأضيف امتحانات أخرى قريباً</div>
+  </div>
+
+  <div class="app-card start-card" id="realExamsScreen" hidden>
+    <button class="screen-back" onclick="backToCategories()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>رجوع</span>
+    </button>
+    <div class="brand-title">الامتحانات الحقيقية</div>
+    <div class="start-title">سيتم إضافة الامتحانات الرسمية هنا قريباً.</div>
+    <div class="exam-note">تابعونا، المحتوى في الطريق</div>
   </div>
 
   <div class="app-card" id="quizContainer" hidden>
@@ -2452,6 +2535,7 @@
 
     let questions = [];
     let currentExamType = null;
+    let lastExamListScreen = 'oldExamsScreen';
     let currentQuestion = 0;
     let selections = [];
     let checked = [];
@@ -2771,9 +2855,34 @@
       document.getElementById('resultsScreen').hidden = false;
     }
 
-    function backToStart() {
+    function hideAllScreens() {
+      document.getElementById('startScreen').hidden = true;
+      document.getElementById('oldExamsScreen').hidden = true;
+      document.getElementById('realExamsScreen').hidden = true;
       document.getElementById('resultsScreen').hidden = true;
+      document.getElementById('quizContainer').hidden = true;
+    }
+
+    function showOldExams() {
+      lastExamListScreen = 'oldExamsScreen';
+      hideAllScreens();
+      document.getElementById('oldExamsScreen').hidden = false;
+    }
+
+    function showRealExams() {
+      lastExamListScreen = 'realExamsScreen';
+      hideAllScreens();
+      document.getElementById('realExamsScreen').hidden = false;
+    }
+
+    function backToCategories() {
+      hideAllScreens();
       document.getElementById('startScreen').hidden = false;
+    }
+
+    function backToStart() {
+      hideAllScreens();
+      document.getElementById(lastExamListScreen).hidden = false;
     }
 
     function startExam(examType) {
@@ -2794,8 +2903,7 @@
       checked = new Array(questions.length).fill(false);
       points = new Array(questions.length).fill(null);
 
-      document.getElementById('startScreen').hidden = true;
-      document.getElementById('resultsScreen').hidden = true;
+      hideAllScreens();
       document.getElementById('quizContainer').hidden = false;
       updateUI();
       startExamTimer();
