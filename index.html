@@ -325,6 +325,20 @@
       color: var(--success-strong);
     }
 
+    .score-live {
+      background: var(--primary-soft);
+      color: var(--primary);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .score-live-percent {
+      background: var(--accent-soft);
+      color: var(--accent);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
     .progress-section {
       margin-bottom: 1.75rem;
     }
@@ -568,6 +582,38 @@
       color: var(--text);
     }
 
+    .question-points {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-soft);
+      background: var(--surface-3);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+    }
+
+    .question-points strong {
+      color: var(--text);
+    }
+
+    .question-points.positive {
+      color: var(--success-strong);
+      background: var(--success-soft);
+    }
+
+    .question-points.positive strong {
+      color: var(--success-strong);
+    }
+
+    .question-points.negative {
+      color: var(--danger-strong);
+      background: var(--danger-soft);
+    }
+
+    .question-points.negative strong {
+      color: var(--danger-strong);
+    }
+
     .question-summary {
       margin-top: 12px;
       font-size: 13px;
@@ -719,6 +765,8 @@
       font-weight: 800;
       color: var(--text);
       line-height: 1;
+      direction: ltr;
+      unicode-bidi: isolate;
     }
 
     .results-percent {
@@ -726,6 +774,14 @@
       font-weight: 700;
       color: var(--primary);
       margin-top: 6px;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .points-value {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
     }
 
     .results-message {
@@ -825,13 +881,11 @@
         <span class="quiz-title" id="quizTitle">الناجحات</span>
       </div>
       <div class="quiz-score">
-        <div class="score-badge score-incorrect">
-          <span>✕</span>
-          <span id="incorrectCount">0</span>
+        <div class="score-badge score-live-percent">
+          <span id="livePercent">0%</span>
         </div>
-        <div class="score-badge score-correct">
-          <span>✓</span>
-          <span id="correctCount">0</span>
+        <div class="score-badge score-live">
+          <span id="liveScore">0.0</span>
         </div>
       </div>
     </div>
@@ -2131,7 +2185,24 @@
     let currentQuestion = 0;
     let selections = [];
     let checked = [];
-    let results = [];
+    let points = [];
+
+    function computePickTotals() {
+      let correctPicks = 0;
+      let wrongPicks = 0;
+      questions.forEach((qq, i) => {
+        if (!checked[i]) return;
+        const cSet = new Set(qq.correct);
+        selections[i].forEach(idx => {
+          if (cSet.has(idx)) {
+            correctPicks++;
+          } else {
+            wrongPicks++;
+          }
+        });
+      });
+      return { correctPicks, wrongPicks };
+    }
 
     function updateUI() {
       const questionSection = document.querySelector('.question-section');
@@ -2218,6 +2289,14 @@
         summary.innerHTML = `<strong>الإجابة الصحيحة:</strong> ${correctLabels}`;
         container.appendChild(summary);
 
+        const questionPoints = points[currentQuestion] || 0;
+        const pointsTier = questionPoints > 0 ? 'positive' : questionPoints < 0 ? 'negative' : 'neutral';
+        const pointsSign = questionPoints > 0 ? '+' : '';
+        const pointsEl = document.createElement('div');
+        pointsEl.className = 'question-points ' + pointsTier;
+        pointsEl.innerHTML = `<strong>نقاط هذا السؤال:</strong> <span class="points-value">${pointsSign}${questionPoints.toFixed(2)}</span>`;
+        container.appendChild(pointsEl);
+
         if (q.summary) {
           const overallSummary = document.createElement('div');
           overallSummary.className = 'question-summary';
@@ -2235,10 +2314,12 @@
         }
       }
 
-      const correctCount = results.filter(r => r === true).length;
-      const incorrectCount = results.filter(r => r === false).length;
-      document.getElementById('correctCount').textContent = correctCount;
-      document.getElementById('incorrectCount').textContent = incorrectCount;
+      const total = questions.length;
+      const earnedSoFar = points.reduce((sum, p, i) => sum + (checked[i] ? (p || 0) : 0), 0);
+      const liveRawPercent = total === 0 ? 0 : (earnedSoFar / total) * 100;
+      const livePercent = Math.max(0, Math.min(100, Math.round(liveRawPercent)));
+      document.getElementById('liveScore').textContent = earnedSoFar.toFixed(1);
+      document.getElementById('livePercent').textContent = `${livePercent}%`;
 
       document.getElementById('backBtn').disabled = currentQuestion === 0;
 
@@ -2266,10 +2347,16 @@
       const q = questions[currentQuestion];
       const selectedSet = selections[currentQuestion];
       const correctSet = new Set(q.correct);
-      const isCorrect = selectedSet.size === correctSet.size &&
-        [...selectedSet].every(idx => correctSet.has(idx));
+      const correctCount = q.correct.length;
+      const wrongCount = q.options.length - correctCount;
+
+      let questionPoints = 0;
+      selectedSet.forEach(idx => {
+        questionPoints += correctSet.has(idx) ? 1 / correctCount : -1 / wrongCount;
+      });
+
       checked[currentQuestion] = true;
-      results[currentQuestion] = isCorrect;
+      points[currentQuestion] = questionPoints;
       updateUI();
     }
 
@@ -2304,11 +2391,17 @@
       function tick(now) {
         const t = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - t, 3);
-        const value = Math.round(from + (to - from) * eased);
+        const value = from + (to - from) * eased;
         el.textContent = formatter(value);
         if (t < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
+    }
+
+    function formatScore(value, total) {
+      let rounded = Math.round(value * 10) / 10;
+      if (rounded === 0) rounded = 0;
+      return `${rounded.toFixed(1)}/${total}`;
     }
 
     function getResultMessage(percent) {
@@ -2338,14 +2431,15 @@
 
     function showResults() {
       const total = questions.length;
-      const correctCount = results.filter(r => r === true).length;
-      const incorrectCount = results.filter(r => r === false).length;
-      const percent = total === 0 ? 0 : Math.round((correctCount / total) * 100);
+      const totalPoints = points.reduce((sum, p) => sum + (p || 0), 0);
+      const rawPercent = total === 0 ? 0 : (totalPoints / total) * 100;
+      const percent = Math.max(0, Math.min(100, Math.round(rawPercent)));
+      const { correctPicks, wrongPicks } = computePickTotals();
 
-      animateNumber(document.getElementById('resultsScore'), 0, correctCount, 900, v => `${v}/${total}`);
-      animateNumber(document.getElementById('resultsPercent'), 0, percent, 900, v => `${v}%`);
-      document.getElementById('resultsCorrect').textContent = correctCount;
-      document.getElementById('resultsIncorrect').textContent = incorrectCount;
+      animateNumber(document.getElementById('resultsScore'), 0, totalPoints, 900, v => formatScore(v, total));
+      animateNumber(document.getElementById('resultsPercent'), 0, percent, 900, v => `${Math.round(v)}%`);
+      document.getElementById('resultsCorrect').textContent = correctPicks;
+      document.getElementById('resultsIncorrect').textContent = wrongPicks;
 
       const ringEl = document.getElementById('ringFill');
       ringEl.style.strokeDashoffset = RING_CIRCUMFERENCE;
@@ -2389,7 +2483,7 @@
       currentQuestion = 0;
       selections = questions.map(() => new Set());
       checked = new Array(questions.length).fill(false);
-      results = new Array(questions.length).fill(null);
+      points = new Array(questions.length).fill(null);
 
       document.getElementById('startScreen').hidden = true;
       document.getElementById('resultsScreen').hidden = true;
