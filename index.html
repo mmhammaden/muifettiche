@@ -77,6 +77,21 @@
       }
     }
 
+    /* Flatter, more institutional elevation on larger screens */
+    @media (min-width: 641px) {
+      :root {
+        --shadow-2: 0 6px 16px -10px rgba(109, 40, 217, 0.16);
+        --shadow-3: 0 14px 34px -16px rgba(109, 40, 217, 0.18);
+      }
+    }
+
+    @media (min-width: 641px) and (prefers-color-scheme: dark) {
+      :root {
+        --shadow-2: 0 6px 16px -10px rgba(0, 0, 0, 0.4);
+        --shadow-3: 0 14px 34px -16px rgba(0, 0, 0, 0.45);
+      }
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -103,7 +118,7 @@
 
     @media (max-width: 480px) {
       body {
-        padding: 20px 12px;
+        padding: 14px 8px;
       }
     }
 
@@ -125,13 +140,13 @@
       position: absolute;
       inset: 0 0 auto 0;
       height: 5px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
     }
 
     @media (max-width: 600px) {
       .app-card {
-        padding: 2rem 1.25rem;
-        border-radius: 22px;
+        padding: 1.75rem 1.1rem;
+        border-radius: 16px;
       }
     }
 
@@ -159,10 +174,7 @@
       font-size: 27px;
       font-weight: 800;
       margin-bottom: 0.6rem;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
     }
 
     .start-title {
@@ -239,7 +251,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: #fff;
     }
 
@@ -336,7 +348,7 @@
       width: 34px;
       height: 34px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -416,7 +428,7 @@
     .progress-fill {
       height: 100%;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
       transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
@@ -476,7 +488,7 @@
       border: 1px solid var(--border-soft);
       border-inline-start: 4px solid var(--primary);
       border-radius: var(--radius-md);
-      padding: 1.25rem 1.4rem;
+      padding: 1.6rem 1.4rem;
       margin-bottom: 1.4rem;
     }
 
@@ -555,7 +567,7 @@
     }
 
     .option.selected .option-label {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: white;
       transform: scale(1.06);
     }
@@ -739,7 +751,7 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
       color: white;
       box-shadow: 0 10px 24px -8px rgba(109, 40, 217, 0.5);
     }
@@ -908,6 +920,34 @@
     [hidden] {
       display: none !important;
     }
+
+    /* Exam simulation mode: stricter, less celebratory than practice */
+    .exam-mode::before {
+      background: var(--text-faint);
+    }
+
+    .exam-mode .brand-title,
+    .exam-mode .quiz-title {
+      color: var(--text);
+    }
+
+    .exam-mode .quiz-brand-icon {
+      background: var(--surface-3);
+      color: var(--text-soft);
+    }
+
+    .exam-mode {
+      border-radius: 18px;
+    }
+
+    .exam-mode .option:hover:not(.disabled) {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .exam-mode .btn-primary:hover:not(:disabled) {
+      transform: none;
+    }
   </style>
 </head>
 <body>
@@ -1026,7 +1066,7 @@
     </div>
   </div>
 
-  <div class="app-card start-card" id="realExamsScreen" hidden>
+  <div class="app-card start-card exam-mode" id="realExamsScreen" hidden>
     <button class="screen-back" onclick="backToCategories()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1177,7 +1217,7 @@
     </div>
   </div>
 
-  <div class="app-card results-card" id="realResultsScreen" hidden>
+  <div class="app-card results-card exam-mode" id="realResultsScreen" hidden>
     <div class="confetti" id="realConfettiLayer"></div>
     <div class="results-ring-wrap">
       <svg class="results-ring" viewBox="0 0 120 120">
@@ -6220,6 +6260,7 @@ const realExam3Questions = [
       points = new Array(questions.length).fill(null);
 
       document.getElementById('quizScoreWrap').style.display = isRealExam() ? 'none' : 'flex';
+      document.getElementById('quizContainer').classList.toggle('exam-mode', isRealExam());
 
       hideAllScreens();
       document.getElementById('quizContainer').hidden = false;
