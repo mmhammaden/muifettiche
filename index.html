@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#6d28d9">
-  <title>الناجحون والناجحات</title>
+  <title>المفتشة الناجحة</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -283,141 +283,6 @@
       margin-top: 1.75rem;
       font-size: 12.5px;
       color: var(--text-faint);
-    }
-
-    /* Landing / competition-over screen */
-    .landing-card {
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-3), 0 0 70px -12px rgba(234, 154, 31, 0.35);
-    }
-
-    .landing-sparkle {
-      position: absolute;
-      color: var(--accent);
-      font-size: 15px;
-      pointer-events: none;
-      animation: twinkle 2.6s ease-in-out infinite;
-      z-index: 0;
-    }
-
-    .landing-sparkle-1 { top: 14%; left: 10%; font-size: 13px; animation-delay: 0.1s; }
-    .landing-sparkle-2 { top: 22%; right: 12%; font-size: 18px; color: var(--primary-2); animation-delay: 0.9s; }
-    .landing-sparkle-3 { top: 56%; left: 6%; font-size: 11px; animation-delay: 1.6s; }
-    .landing-sparkle-4 { top: 8%; right: 28%; font-size: 10px; color: var(--success); animation-delay: 0.5s; }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
-      50% { opacity: 1; transform: scale(1.2) rotate(15deg); }
-    }
-
-    .landing-trophy-wrap {
-      position: relative;
-      width: 96px;
-      height: 96px;
-      margin-bottom: 1.1rem;
-      animation: trophyPop 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1;
-    }
-
-    .landing-trophy-wrap::before {
-      content: "";
-      position: absolute;
-      inset: -22px;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--accent-soft), transparent 72%);
-      animation: haloPulse 2.4s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    .landing-trophy {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 14px 22px rgba(234, 154, 31, 0.35));
-    }
-
-    @keyframes trophyPop {
-      0% { opacity: 0; transform: scale(0.55) translateY(12px) rotate(-8deg); }
-      65% { opacity: 1; transform: scale(1.08) translateY(0) rotate(3deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-
-    @keyframes haloPulse {
-      0%, 100% { transform: scale(0.88); opacity: 0.55; }
-      50% { transform: scale(1.18); opacity: 1; }
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .landing-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 18px;
-      border-radius: 999px;
-      background: var(--success-soft);
-      color: var(--success-strong);
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 1.1rem;
-      letter-spacing: 0.2px;
-      box-shadow: 0 4px 14px -4px var(--success-ring);
-      animation: fadeUp 0.6s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .landing-title {
-      font-size: 31px;
-      background-size: 200% auto;
-      background-position: 0% 50%;
-      animation:
-        fadeUp 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both,
-        titleShine 2s 1.05s ease-in-out 1;
-    }
-
-    @keyframes titleShine {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
-    @media (max-width: 480px) {
-      .landing-title {
-        font-size: 25px;
-      }
-    }
-
-    .landing-subtitle {
-      margin-bottom: 2.25rem;
-      animation: fadeUp 0.6s 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .landing-enter-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 15.5px;
-      padding: 15px 26px;
-      max-width: 340px;
-      position: relative;
-      animation:
-        fadeUp 0.6s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both,
-        btnGlow 2.4s 1.6s ease-in-out infinite;
-    }
-
-    .landing-enter-btn svg {
-      transition: transform 0.25s ease;
-    }
-
-    .landing-enter-btn:hover svg {
-      transform: translateX(-3px);
-    }
-
-    @keyframes btnGlow {
-      0%, 100% { box-shadow: 0 10px 24px -8px rgba(109, 40, 217, 0.5); }
-      50% { box-shadow: 0 12px 32px -6px rgba(234, 154, 31, 0.65); }
     }
 
     /* Quiz screen */
@@ -1046,43 +911,7 @@
   </style>
 </head>
 <body>
-  <div class="app-card start-card landing-card" id="landingScreen">
-    <div class="confetti" id="landingConfettiLayer"></div>
-    <span class="landing-sparkle landing-sparkle-1">✦</span>
-    <span class="landing-sparkle landing-sparkle-2">✦</span>
-    <span class="landing-sparkle landing-sparkle-3">✦</span>
-    <span class="landing-sparkle landing-sparkle-4">✦</span>
-    <div class="landing-trophy-wrap">
-      <svg class="landing-trophy" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="trophyGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#ea9a1f"/>
-            <stop offset="1" stop-color="#6d28d9"/>
-          </linearGradient>
-        </defs>
-        <path d="M18 8h28v13c0 7.73-6.27 14-14 14s-14-6.27-14-14V8z" fill="url(#trophyGrad)"/>
-        <path d="M18 12h-7a7 7 0 0 0 7 12" stroke="url(#trophyGrad)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-        <path d="M46 12h7a7 7 0 0 1-7 12" stroke="url(#trophyGrad)" stroke-width="3.4" stroke-linecap="round" fill="none"/>
-        <rect x="29" y="34" width="6" height="10" fill="url(#trophyGrad)"/>
-        <path d="M17 53c0-3.6 6.7-6.5 15-6.5s15 2.9 15 6.5v2H17v-2z" fill="url(#trophyGrad)"/>
-        <path d="M25 19.5l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z" fill="#fff" opacity="0.9"/>
-      </svg>
-    </div>
-    <div class="landing-badge">🎉 المسابقة انتهت الآن</div>
-    <div class="brand-title landing-title">ألف مبروك للجميع!</div>
-    <div class="start-title landing-subtitle">
-      تهانينا الحارة لكل من شارك وثابر وبذل جهداً طوال أيام المسابقة.<br>
-      نفخر بحماسكم وإصراركم، ونتمنى لكم مستقبلاً حافلاً بالتفوق والنجاح في كل خطوة قادمة.
-    </div>
-    <button class="btn btn-primary btn-wide landing-enter-btn" onclick="enterApp()">
-      <span>عرض المحتوى</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" transform="scale(-1,1) translate(-24,0)"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="app-card start-card" id="startScreen" hidden>
+  <div class="app-card start-card" id="startScreen">
     <svg class="brand-icon-wrap" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="brandGradStart" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
@@ -1095,7 +924,7 @@
       <circle cx="32" cy="26" r="22" fill="url(#brandGradStart)"/>
       <path d="M22 27 L29 34 L43 19" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     </svg>
-    <div class="brand-title">الناجحون والناجحات</div>
+    <div class="brand-title">المفتشة الناجحة</div>
     <div class="start-title">مرحباً أيها المتسابقون، اختاروا فئة الامتحانات:</div>
     <div class="exam-list">
       <button class="exam-card" onclick="showOldExams()">
@@ -1232,7 +1061,7 @@
           </svg>
         </span>
         <span class="exam-card-body">
-          <span class="exam-card-title">الناجحون والناجحات</span>
+          <span class="exam-card-title">المفتشة الناجحة</span>
           <span class="exam-card-subtitle">60 سؤالاً في المالية العامة، النتيجة والتصحيح يظهران بعد الانتهاء فقط</span>
         </span>
         <span class="exam-card-arrow">
@@ -1279,7 +1108,7 @@
             <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.6"/>
           </svg>
         </span>
-        <span class="quiz-title" id="quizTitle">الناجحون والناجحات</span>
+        <span class="quiz-title" id="quizTitle">المفتشة الناجحة</span>
       </div>
       <div class="quiz-score" id="quizScoreWrap">
         <div class="score-badge score-live-percent">
@@ -6925,26 +6754,6 @@ const realExam3Questions = [
       }
     }
 
-    function spawnLandingConfetti(container) {
-      container.innerHTML = '';
-      const colors = ['var(--primary)', 'var(--accent)', 'var(--success)', 'var(--primary-2)', '#f472b6'];
-      for (let i = 0; i < 34; i++) {
-        const dot = document.createElement('span');
-        const isCircle = Math.random() > 0.45;
-        const size = 5 + Math.random() * 6;
-        dot.style.left = Math.random() * 100 + '%';
-        dot.style.width = size + 'px';
-        dot.style.height = (isCircle ? size : size * 1.9) + 'px';
-        dot.style.borderRadius = isCircle ? '50%' : '2px';
-        dot.style.background = colors[i % colors.length];
-        dot.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
-        dot.style.setProperty('--spin', (Math.random() * 540 + 180) + 'deg');
-        dot.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
-        dot.style.animationDelay = (Math.random() * 0.9) + 's';
-        container.appendChild(dot);
-      }
-    }
-
     function showResults() {
       stopExamTimer();
 
@@ -7145,13 +6954,7 @@ const realExam3Questions = [
       document.getElementById('realResultsScreen').hidden = false;
     }
 
-    function enterApp() {
-      document.getElementById('landingScreen').hidden = true;
-      document.getElementById('startScreen').hidden = false;
-    }
-
     function hideAllScreens() {
-      document.getElementById('landingScreen').hidden = true;
       document.getElementById('startScreen').hidden = true;
       document.getElementById('oldExamsScreen').hidden = true;
       document.getElementById('realExamsScreen').hidden = true;
@@ -7213,8 +7016,6 @@ const realExam3Questions = [
       updateUI();
       startExamTimer();
     }
-
-    spawnLandingConfetti(document.getElementById('landingConfettiLayer'));
   </script>
 </body>
 </html>
